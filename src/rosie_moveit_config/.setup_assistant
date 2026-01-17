@@ -1,0 +1,27 @@
+moveit_setup_assistant_config:
+  urdf:
+    package: rosie_description
+    relative_path: urdf/model.urdf
+  srdf:
+    relative_path: config/rosie_V1.srdf
+  package_settings:
+    author_name: Samson Ajadalu
+    author_email: samson@samsonajadalu.com
+    generated_timestamp: 1736472702
+  control_xacro:
+    command:
+      - position
+      - velocity
+    state:
+      - position
+      - velocity
+  modified_urdf:
+    xacros:
+      - control_xacro
+  control_xacro:
+    command:
+      - position
+      - velocity
+    state:
+      - position
+      - velocity
