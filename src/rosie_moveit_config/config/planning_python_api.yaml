@@ -1,0 +1,35 @@
+planning_pipelines:
+  pipeline_names: ["ompl"]
+
+plan_request_params:
+  planner_id: ompl
+  planning_attempts: 1
+  planning_pipeline: ompl
+  max_velocity_scaling_factor: 0.1
+  max_acceleration_scaling_factor: 0.1
+
+
+start_state_max_bounds_error: 10.0  # Allow larger error in initial state
+collision_check_resolution: 0.01  # Looser collision checking resolution
+goal_joint_tolerance: 0.1  # Tolerance for joint goals
+goal_position_tolerance: 0.1  # Tolerance for position goals
+goal_orientation_tolerance: 0.5  # Tolerance for orientation goals
+debug: true  # Enable debug for troubleshooting
+
+planner_configs:
+  RRTConnectkConfigDefault:
+    type: geometric::RRTConnect
+    range: 0.0  # Max motion added to the tree
+    min_valid_path_fraction: 0.1  # Allow paths where only 10% are valid
+    goal_bias: 0.05  # Bias probability towards the goal
+    delay_collision_checking: 1  # Postpone collision checks
+
+constraints:
+  goal_constraints:
+    position: 0.1
+    orientation: 0.5
+    joint: 0.1
+  path_constraints:
+    position: 0.1
+    orientation: 0.5
+    joint: 0.1

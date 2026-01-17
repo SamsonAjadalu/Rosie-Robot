@@ -1,0 +1,65 @@
+# Large 3D Model Files
+*.stl
+
+# AI Model Weights
+*.pt
+
+# Build artifacts
+build/
+install/
+log/
+devel/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+.Python
+
+# IDE and Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# ROS specific
+*.o
+*.a
+*.so
+devel/
+install/
+build/
+
+# CMake
+CMakeCache.txt
+cmake_install.cmake
+CTestTestfile.cmake
+Makefile
+*.cmake
+
+# Temporary files
+*.tmp
+*.bak
+*.orig
+
+# Git
+.git/
+.gitmodules
+
+# VS Code settings
+.vscode/settings.json
+.vscode/launch.json
+
+# Coverage
+.coverage
+htmlcov/
+
+# Generated documentation
+doc/_build/

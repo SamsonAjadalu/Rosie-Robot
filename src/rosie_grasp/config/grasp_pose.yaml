@@ -1,0 +1,21 @@
+rosie_grasp:
+  ros__parameters:
+    checkpoint_path: ""
+    confidence_threshold: 0.50
+    min_depth_m: 0.15
+    max_depth_m: 2.0
+    point_cloud_bounds: [-2.0, 2.0, -2.0, 2.0, 0.15, 2.0]
+    crop_to_detection: true
+    target_class: ""
+    rgb_topic: /image_raw
+    depth_topic: /depth
+    camera_info_topic: /camera_info
+    detections_topic: /Yolov8_Inference
+    camera_frame: "camera_color_optical_frame"
+    base_frame: base_link
+    grasp_topic: /grasp_pose
+    candidates_topic: /grasp_candidates
+    candidate_scores_topic: /grasp_candidate_scores
+    backend_module: contact_graspnet
+    backend_class: ContactGraspNet
+    debug: true
