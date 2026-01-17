@@ -63,3 +63,13 @@ htmlcov/
 
 # Generated documentation
 doc/_build/
+
+# Mesh files (too large)
+src/rosie_description/urdf/meshes/
+*.zip
+*.stl
+
+# Model weights
+*.pt
+best.pt
+yolov8n-obb.pt
