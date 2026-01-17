@@ -6,6 +6,12 @@ A complete ROS2 motion planning and perception system for the Rosie mobile manip
   <a href="https://www.youtube.com/watch?v=qHLM9LW5f4Y">
     <img src="demo.gif" alt="Demo" />
   </a>
+  
+  <br> <p>
+    <a href="https://www.youtube.com/watch?v=qHLM9LW5f4Y">
+      <b>🎥 Click here to watch the full video on YouTube</b>
+    </a>
+  </p>
 </div>
 ## Overview
 
