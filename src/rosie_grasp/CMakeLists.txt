@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 3.8)
+project(rosie_grasp)
+find_package(ament_cmake REQUIRED)
+install(PROGRAMS scripts/grasp_pose_node.py DESTINATION lib/${PROJECT_NAME})
+install(DIRECTORY launch config test DESTINATION share/${PROJECT_NAME})
+install(PROGRAMS scripts/grasp_utils.py DESTINATION lib/${PROJECT_NAME})
+ament_package()

@@ -36,7 +36,7 @@ pilz_lin:
     max_acceleration_scaling_factor: 1.0
     planning_time: 0.8
 
-stomp_b:  # Added this
+stomp_b:  # STOMP planner configuration.
   plan_request_params:
     planning_attempts: 10
     planning_pipeline: stomp

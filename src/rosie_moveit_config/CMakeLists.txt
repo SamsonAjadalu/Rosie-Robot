@@ -12,6 +12,7 @@ install(PROGRAMS
 
 install(PROGRAMS
   scripts/synchronized_pub.py
+  scripts/grasp_math.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
@@ -20,4 +21,5 @@ install(
   DESTINATION share/${PROJECT_NAME}
   PATTERN "setup_assistant.launch" EXCLUDE)
 install(DIRECTORY config DESTINATION share/${PROJECT_NAME})
+install(DIRECTORY test DESTINATION share/${PROJECT_NAME})
 install(FILES .setup_assistant DESTINATION share/${PROJECT_NAME})

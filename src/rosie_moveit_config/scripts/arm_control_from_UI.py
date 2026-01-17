@@ -19,6 +19,7 @@ from moveit.core.kinematic_constraints import construct_joint_constraint
 
 from tf2_ros import Buffer, TransformListener, TransformException
 from tf2_geometry_msgs import do_transform_pose
+from grasp_math import normalize_quaternion, offset_along_grasp_axis
 
 def plan_and_execute(
     robot,
@@ -65,6 +66,15 @@ class Controller(Node):
             '/target_point',
             self.listener_callback,
             10)
+        self.grasp_subscription = self.create_subscription(
+            PoseStamped, '/grasp_pose', self.grasp_callback, 10)
+        self.declare_parameter('grasp_mode', 'learned')
+        self.declare_parameter('mode', '')  # backwards-compatible alias
+        self.declare_parameter('grasp_timeout_sec', 3.0)
+        self.declare_parameter('legacy_fallback_enabled', True)
+        self.declare_parameter('approach_axis', [0.0, 0.0, -1.0])
+        self.grasp_pose = None
+        self.grasp_received_time = None
         self.subscription
         self.publisher_ = self.create_publisher(Bool, "gripper_bool", 10)
         self.bool_msg = Bool()
@@ -73,14 +83,14 @@ class Controller(Node):
 
         # Initialize PoseStamped for goal
         self.pose_goal = PoseStamped()
-        self.pose_goal.header.frame_id = "base_link"  # Replace "panda_link0" with your robot's base frame
+        self.pose_goal.header.frame_id = "base_link"  # Rosie base frame.
         self.tf_buffer = Buffer()
         self.tf_listener = TransformListener(self.tf_buffer, self)
 
         # Instantiate MoveItPy instance and get planning components
         self.robot = MoveItPy(node_name="moveit_py")
-        self.right_arm = self.robot.get_planning_component("right_arm")  # Replace with your arm group
-        self.right_gripper = self.robot.get_planning_component("right_gripper")  # Replace with your gripper group
+        self.right_arm = self.robot.get_planning_component("right_arm")
+        self.right_gripper = self.robot.get_planning_component("right_gripper")
         self.logger = get_logger("moveit_py.pose_goal")
 
         # Get robot model and state
@@ -92,6 +102,11 @@ class Controller(Node):
         self.gripper_offset = 0.07 + self.update_h
         self.carry_clearance  = 0.15 + self.update_h
         self.approach_clearance = 0.15 + self.update_h
+
+    def grasp_callback(self, msg):
+        self.grasp_pose = msg
+        self.grasp_received_time = self.get_clock().now()
+        self.get_logger().info(f'Received learned grasp pose in {msg.header.frame_id}')
 
 # Function to move to a specific pose
     def move_to(self, x, y, z, xo, yo, zo, wo):
@@ -107,7 +122,7 @@ class Controller(Node):
         self.pose_goal.pose.orientation.w = wo
 
         # Set goal state for the right_arm
-        self.right_arm.set_goal_state(pose_stamped_msg=self.pose_goal, pose_link="right_gripper_base_link")  # Adjust `pose_link` if necessary
+        self.right_arm.set_goal_state(pose_stamped_msg=self.pose_goal, pose_link="right_gripper_base_link")
         plan_and_execute(self.robot, self.right_arm, self.logger, sleep_time=5.0)
 
     # Function for gripper actions
@@ -118,11 +133,11 @@ class Controller(Node):
         self.right_gripper.set_start_state_to_current_state()
 
         if action == 'close':
-            joint_values = {"right_finger_joint": 0.3}  # Replace with actual joint name and open position
+            joint_values = {"right_finger_joint": 0.3}  # Open position.
             self.bool_msg.data = True  # Set the boolean value
 
         elif action == 'open':
-            joint_values = {"right_finger_joint": 0.01}  # Replace with actual joint name and closed position
+            joint_values = {"right_finger_joint": 0.01}  # Closed position.
             self.bool_msg.data = False  # Set the boolean value
             
         else:
@@ -134,7 +149,7 @@ class Controller(Node):
         self.robot_state.joint_positions = joint_values
         joint_constraint = construct_joint_constraint(
             robot_state=self.robot_state,
-            joint_model_group=self.robot.get_robot_model().get_joint_model_group("right_gripper"),  # Adjust group name as needed
+            joint_model_group=self.robot.get_robot_model().get_joint_model_group("right_gripper"),
         )
         self.right_gripper.set_goal_state(motion_plan_constraints=[joint_constraint])
         plan_and_execute(self.robot, self.right_gripper, self.logger, sleep_time=3.0)
@@ -145,30 +160,59 @@ class Controller(Node):
         y = msg.data[1]
         z = msg.data[2]
 
-        qx = 0.982
-        qy = 0.11
-        qz = 0.0
-        qw = 0.15
+        learned = self.grasp_pose is not None and self.grasp_received_time is not None
+        if learned:
+            age = (self.get_clock().now() - self.grasp_received_time).nanoseconds / 1e9
+            learned = age <= float(self.get_parameter('grasp_timeout_sec').value)
+        mode_alias = str(self.get_parameter('mode').value)
+        mode = mode_alias or str(self.get_parameter('grasp_mode').value)
+        if mode == 'legacy':
+            learned = False
+        if learned:
+            x = self.grasp_pose.pose.position.x
+            y = self.grasp_pose.pose.position.y
+            z = self.grasp_pose.pose.position.z
+            qx, qy, qz, qw = normalize_quaternion((
+                self.grasp_pose.pose.orientation.x,
+                self.grasp_pose.pose.orientation.y,
+                self.grasp_pose.pose.orientation.z,
+                self.grasp_pose.pose.orientation.w))
+            self.get_logger().info('Using learned 6-DoF grasp pose')
+        else:
+            if not bool(self.get_parameter('legacy_fallback_enabled').value) and mode != 'legacy':
+                self.get_logger().error('No valid learned grasp and legacy fallback is disabled')
+                return
+            qx, qy, qz, qw = 0.982, 0.11, 0.0, 0.15
+            self.get_logger().warning('No valid learned grasp; using legacy fixed quaternion')
 
         self.get_logger().info(f" Msg.data object {msg.data}")
 
-        self.move_to(x, y, z + self.approach_clearance, qx, qy, qz, qw)
+        if learned:
+            approach = offset_along_grasp_axis((x, y, z), (qx, qy, qz, qw), self.approach_clearance, self.get_parameter('approach_axis').value)
+            carry = offset_along_grasp_axis((x, y, z), (qx, qy, qz, qw), self.carry_clearance, self.get_parameter('approach_axis').value)
+            approach_x, approach_y, approach_z = approach
+            carry_x, carry_y, carry_z = carry
+        else:
+            approach_x, approach_y, approach_z = x, y, z + self.approach_clearance
+            carry_x, carry_y, carry_z = x, y, z + self.carry_clearance
+
+        self.move_to(approach_x, approach_y, approach_z, qx, qy, qz, qw)
         self.get_logger().info(f" first action")
 
 
         self.gripper_action("open")
         self.get_logger().info(f" second action")
 
-        self.move_to(x, y, z + self.gripper_offset, qx, qy, qz, qw)
+        self.move_to(x, y, z, qx, qy, qz, qw)
         self.get_logger().info(f" third action")
 
         self.gripper_action("close")
         self.get_logger().info(f" fourth action")
 
-        self.move_to(x, y, z + self.carry_clearance, qx, qy, qz, qw)
+        self.move_to(carry_x, carry_y, carry_z, qx, qy, qz, qw)
         self.get_logger().info(f" fifth action")
 
-        self.move_to(x - 0.2, y, z + self.carry_clearance, qx, qy, qz, qw)
+        self.move_to(carry_x - 0.2, carry_y, carry_z, qx, qy, qz, qw)
         self.get_logger().info(f" sixth action")
 
         self.gripper_action("open")
