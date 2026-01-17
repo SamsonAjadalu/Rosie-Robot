@@ -63,3 +63,6 @@ htmlcov/
 
 # Generated documentation
 doc/_build/
+
+# PlatformIO build artifacts
+.pio/
