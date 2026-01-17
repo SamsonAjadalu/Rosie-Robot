@@ -9,6 +9,7 @@ build/
 install/
 log/
 devel/
+.pio/
 
 # Python cache
 __pycache__/
@@ -64,5 +65,13 @@ htmlcov/
 # Generated documentation
 doc/_build/
 
-# PlatformIO build artifacts
-.pio/
+# Mesh files (too large)
+src/rosie_description/urdf/meshes/
+*.zip
+*.stl
+
+# Model weights
+*.pt
+best.pt
+yolov8n-obb.pt
+CODEBASE_SUMMARY.md
