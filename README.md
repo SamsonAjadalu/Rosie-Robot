@@ -219,31 +219,7 @@ ROS2 control interface configuration
 ### motion_planning.rviz
 Pre-configured RViz layout with robot visualization
 
-## Troubleshooting
 
-### MoveIt Planning Fails
-- Check if `rosie_controller.launch.py` is running
-- Verify robot state in RViz
-
-### YOLOv8 No Detections
-- Ensure `/image_raw` is publishing (check with `ros2 topic echo /image_raw`)
-- Verify model file `yolov8n-obb.pt` exists
-
-### Arm Not Moving
-- Check `/target_point` topic is being published
-- Verify controllers are active: `ros2 control list_controllers`
-
-## Large Files
-
-The following files are included but use Git LFS in production:
-- `rosie_description/urdf/meshes/*.stl` - 3D robot models (~70MB)
-- `rosie_moveit_config/scripts/yolov8n-obb.pt` - AI model weights (6.3MB)
-
-To use Git LFS:
-```bash
-git lfs install
-git lfs pull
-```
 
 ## Dependencies
 
