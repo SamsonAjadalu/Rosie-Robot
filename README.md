@@ -2,9 +2,11 @@
 
 A complete ROS2 motion planning and perception system for the Rosie mobile manipulator robot. Integrates YOLOv8 object detection with MoveIt2 motion planning for autonomous pick-and-place operations.
 
-**🎥 Demo:** [Rosie: Home Assistant Robot in Isaac Sim](https://www.youtube.com/watch?v=qHLM9LW5f4Y)
-[![Demo](demo.gif)](https://www.youtube.com/watch?v=qHLM9LW5f4Y)
-
+<div align="center">
+  <a href="https://www.youtube.com/watch?v=qHLM9LW5f4Y">
+    <img src="demo.gif" alt="Demo" />
+  </a>
+</div>
 ## Overview
 
 This workspace contains:
