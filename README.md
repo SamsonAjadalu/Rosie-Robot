@@ -39,7 +39,7 @@ colcon build --symlink-install
 source install/setup.bash
 ```
 
-### Run Everything (One Command!)
+### Launch Navigation Stack
 ```bash
 ros2 launch rosie_navigation bringup.launch.py
 ```
