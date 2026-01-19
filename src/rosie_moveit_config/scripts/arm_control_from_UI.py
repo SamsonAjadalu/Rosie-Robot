@@ -83,14 +83,14 @@ class Controller(Node):
 
         # Initialize PoseStamped for goal
         self.pose_goal = PoseStamped()
-        self.pose_goal.header.frame_id = "base_link"  # Replace "panda_link0" with your robot's base frame
+        self.pose_goal.header.frame_id = "base_link"  # Rosie base frame.
         self.tf_buffer = Buffer()
         self.tf_listener = TransformListener(self.tf_buffer, self)
 
         # Instantiate MoveItPy instance and get planning components
         self.robot = MoveItPy(node_name="moveit_py")
-        self.right_arm = self.robot.get_planning_component("right_arm")  # Replace with your arm group
-        self.right_gripper = self.robot.get_planning_component("right_gripper")  # Replace with your gripper group
+        self.right_arm = self.robot.get_planning_component("right_arm")
+        self.right_gripper = self.robot.get_planning_component("right_gripper")
         self.logger = get_logger("moveit_py.pose_goal")
 
         # Get robot model and state
@@ -122,7 +122,7 @@ class Controller(Node):
         self.pose_goal.pose.orientation.w = wo
 
         # Set goal state for the right_arm
-        self.right_arm.set_goal_state(pose_stamped_msg=self.pose_goal, pose_link="right_gripper_base_link")  # Adjust `pose_link` if necessary
+        self.right_arm.set_goal_state(pose_stamped_msg=self.pose_goal, pose_link="right_gripper_base_link")
         plan_and_execute(self.robot, self.right_arm, self.logger, sleep_time=5.0)
 
     # Function for gripper actions
@@ -133,11 +133,11 @@ class Controller(Node):
         self.right_gripper.set_start_state_to_current_state()
 
         if action == 'close':
-            joint_values = {"right_finger_joint": 0.3}  # Replace with actual joint name and open position
+            joint_values = {"right_finger_joint": 0.3}  # Open position.
             self.bool_msg.data = True  # Set the boolean value
 
         elif action == 'open':
-            joint_values = {"right_finger_joint": 0.01}  # Replace with actual joint name and closed position
+            joint_values = {"right_finger_joint": 0.01}  # Closed position.
             self.bool_msg.data = False  # Set the boolean value
             
         else:
@@ -149,7 +149,7 @@ class Controller(Node):
         self.robot_state.joint_positions = joint_values
         joint_constraint = construct_joint_constraint(
             robot_state=self.robot_state,
-            joint_model_group=self.robot.get_robot_model().get_joint_model_group("right_gripper"),  # Adjust group name as needed
+            joint_model_group=self.robot.get_robot_model().get_joint_model_group("right_gripper"),
         )
         self.right_gripper.set_goal_state(motion_plan_constraints=[joint_constraint])
         plan_and_execute(self.robot, self.right_gripper, self.logger, sleep_time=3.0)

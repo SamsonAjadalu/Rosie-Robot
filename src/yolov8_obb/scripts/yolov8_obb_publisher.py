@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 from ultralytics import YOLO
-import os
 import copy
 import rclpy
 from rclpy.node import Node
@@ -18,7 +17,6 @@ class Camera_subscriber(Node):
     def __init__(self):
         super().__init__('camera_subscriber')
 
-        # self.model = YOLO(os.environ['HOME'] + '/yolov8_obb_ros2/src/yolov8_obb/scripts/best.pt')
         self.model = YOLO("yolov8n-obb.pt")  # load a pretrained model
 
         self.yolov8_inference = Yolov8Inference()

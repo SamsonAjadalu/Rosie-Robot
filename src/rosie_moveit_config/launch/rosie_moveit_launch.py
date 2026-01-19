@@ -9,7 +9,7 @@ from launch.actions import ExecuteProcess, DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
 
 def generate_launch_description():
-    # Define paths to your package and configuration files
+    # Define package and configuration paths.
     package_name = "rosie_moveit_config"
     package_share_dir = get_package_share_directory(package_name)
     config_dir = os.path.join(package_share_dir, "config")
@@ -46,8 +46,8 @@ def generate_launch_description():
         # Simple MoveIt Interface
         Node(
             package="rosie_moveit_config",
-            executable="arm_control_from_UI.py",  # Replace with your executable
-            name="moveit_arm_controller",  # Assign an explicit name
+            executable="arm_control_from_UI.py",
+            name="moveit_arm_controller",
             parameters=[moveit_config.to_dict(), {"use_sim_time": False,
                                                   "grasp_mode": LaunchConfiguration("grasp_mode"),
                                                   "legacy_fallback_enabled": LaunchConfiguration("legacy_fallback_enabled")}],

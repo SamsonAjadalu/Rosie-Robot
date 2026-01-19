@@ -1,26 +1,22 @@
 # Rosie learned grasping
 
-The ROS node is an adapter, not a vendored copy of Contact-GraspNet. This keeps
-ROS2 Humble dependencies separate from the older research environment and avoids
-silently installing incompatible TensorFlow/PyTorch packages into the workspace.
+`rosie_grasp` connects Rosie’s RGB-D, YOLO, and TF2 streams to Contact-GraspNet
+inference. Run the model in a dedicated environment so its research dependencies
+remain separate from the ROS 2 Humble workspace.
 
-Install the selected Contact-GraspNet checkout in a dedicated environment, then
-source ROS and run the node with that environment's Python on the machine that
-has the checkpoint/GPU:
+Install the official Contact-GraspNet checkout and create its environment on the
+machine that has the checkpoint and GPU:
 
 ```bash
-python3 -m venv /opt/rosie-contact-graspnet-venv
-source /opt/rosie-contact-graspnet-venv/bin/activate
-git clone <your-tested-contact-graspnet-checkout> /opt/contact_graspnet
-pip install -r /opt/contact_graspnet/requirements.txt
+git clone https://github.com/NVlabs/contact_graspnet.git /opt/contact_graspnet
+conda env create -f /opt/contact_graspnet/contact_graspnet_env.yml
+conda activate contact_graspnet
 source /opt/ros/humble/setup.bash
 source install/setup.bash
 python /path/to/rosie_grasp/scripts/grasp_pose_node.py --ros-args \
-  -p checkpoint_path:=/opt/contact_graspnet/checkpoints/contact_graspnet.pt
+  -p checkpoint_path:=/opt/contact_graspnet/checkpoints/<checkpoint>.pt
 ```
 
-The adapter accepts a backend class with either `predict_scene(points, colors)`
-or `predict(points, colors)` and expects dictionaries containing `position`,
-`quaternion`, `score` (or `confidence`), and optional `collision_free`. A local
-Contact-GraspNet fork may need a tiny adapter at `GraspBackend.predict`; no
-successful inference is claimed when the checkpoint or backend is unavailable.
+The backend accepts either `predict_scene(points, colors)` or `predict(points,
+colors)` and returns candidates containing `position`, `quaternion`, and `score`
+(or `confidence`), with optional `collision_free` metadata.

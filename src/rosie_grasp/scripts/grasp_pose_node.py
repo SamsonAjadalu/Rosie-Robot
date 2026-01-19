@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
-"""ROS adapter around an externally installed Contact-GraspNet checkout.
+"""ROS 2 adapter for Contact-GraspNet inference in a separate environment.
 
-The model is intentionally loaded lazily: the ROS workspace remains Humble-only and
-the node still starts (and reports a clear warning) when the optional model env is absent.
+The backend is loaded lazily so ROS startup remains independent of model initialization.
 """
 import importlib
 import numpy as np
@@ -40,7 +39,7 @@ class GraspBackend:
     def predict(self, points, colors):
         if self.model is None:
             return []
-        # Keep this boundary small: local Contact-GraspNet forks expose different APIs.
+        # Support the two common Contact-GraspNet inference entry points.
         if hasattr(self.model, 'predict_scene'):
             return self.model.predict_scene(points, colors)
         if hasattr(self.model, 'predict'):

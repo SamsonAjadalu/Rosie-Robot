@@ -9,9 +9,9 @@ class DepthCameraSynchronizer(Node):
     def __init__(self):
         super().__init__("depth_camera_synchronizer")
 
-        # Subscribers for Isaac topics
-        self.depth_sub = Subscriber(self, Image, "/isaac/depth")  # Replace with your Isaac depth topic
-        self.camera_info_sub = Subscriber(self, CameraInfo, "/isaac/camera_info")  # Replace with your Isaac camera info topic
+        # Input depth and camera calibration streams.
+        self.depth_sub = Subscriber(self, Image, "/isaac/depth")
+        self.camera_info_sub = Subscriber(self, CameraInfo, "/isaac/camera_info")
 
         # Publishers for synchronized standard topics
         self.synced_depth_pub = self.create_publisher(Image, "/depth", 10)
