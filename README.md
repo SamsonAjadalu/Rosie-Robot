@@ -101,27 +101,6 @@ src/
 
 ---
 
-
-## Key Features
-
-### SLAM + Navigation
-- Real-time environment mapping
-- AMCL localization with particle filter
-- Nav2 with DWB local planner
-- Holonomic motion model for Mecanum wheels
-
-### Object Detection
-- YOLOv8 Oriented Bounding Boxes (OBB)
-- Real-time inference on Jetson Nano
-- Accurate grasping point calculation
-
-### Motion Planning
-- MoveIt2 for 6-DOF arm
-- Collision-free trajectory planning
-- Pick-and-place pipeline
-
----
-
 ## Next Steps
 
 - 🔄 Optimize SLAM in complex environments
@@ -139,8 +118,6 @@ src/
 - [SLAM Toolbox](https://github.com/SteveMacenski/slam_toolbox)
 - [MicroROS-Car-Pi5 Reference](https://github.com/YahboomTechnology/MicroROS-Car-Pi5)
 
----
 
-**License:** Apache 2.0 | **Author:** Robots With AI | **Updated:** January 2026
 
 
