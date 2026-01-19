@@ -3,6 +3,18 @@
 Rosie is an autonomous home assistant robot designed for object detection, navigation, and manipulation.  
 **2024 - Present**
 
+<div align="center">
+  <a href="https://www.youtube.com/watch?v=qHLM9LW5f4Y">
+    <img src="demo.gif" alt="Demo" />
+  </a>
+  
+  <br> <p>
+    <a href="https://www.youtube.com/watch?v=qHLM9LW5f4Y">
+      <b>🎥 Click here to watch the demo</b>
+    </a>
+  </p>
+</div>
+
 ---
 
 ## What is Rosie?
