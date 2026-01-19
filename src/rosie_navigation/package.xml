@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>rosie_navigation</name>
+  <version>1.0.0</version>
+  <description>Navigation stack for Rosie Mecanum robot</description>
+  <maintainer email="robotswithai@example.com">Rosie Team</maintainer>
+  <license>Apache-2.0</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <depend>nav2_bringup</depend>
+  <depend>nav2_core</depend>
+  <depend>nav2_common</depend>
+  <depend>slam_toolbox</depend>
+  <depend>pointcloud_to_laserscan</depend>
+  <depend>amcl</depend>
+
+  <exec_depend>mecanumbot_bringup</exec_depend>
+  <exec_depend>rosie_description</exec_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

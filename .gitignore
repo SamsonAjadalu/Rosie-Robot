@@ -73,3 +73,4 @@ src/rosie_description/urdf/meshes/
 *.pt
 best.pt
 yolov8n-obb.pt
+CODEBASE_SUMMARY.md
