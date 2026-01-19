@@ -1,6 +1,6 @@
 # Rosie: Mecanum-Wheeled Home Assistant Robot
 
-Rosie is an autonomous home assistant robot designed for object detection, navigation, and manipulation.  
+Rosie is a home assistant robot designed for object detection, grasping, and navigation. This project explores autonomous mobility, human-robot interaction, and real-world deployment.  
 **2024 - Present**
 
 <div align="center">
@@ -19,10 +19,10 @@ Rosie is an autonomous home assistant robot designed for object detection, navig
 
 ## What is Rosie?
 
-A mobile manipulator with:
+A humanoid mobile robot with:
 - 🧭 **Autonomous Navigation** (SLAM + Nav2)
 - 👁️ **Object Detection** (YOLOv8)  
-- 🦾 **Robotic Arm** (6-DOF with gripper)
+- 🦾 **Two Arms with Hands** (dexterous manipulation)
 - 🚗 **Holonomic Motion** (Mecanum wheels - strafe in any direction)
 
 **Hardware Stack:** Jetson Nano (AI) → Raspberry Pi (ROS2) → ESP32 (motor control)
