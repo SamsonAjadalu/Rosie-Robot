@@ -50,7 +50,7 @@ This starts:
 - ✅ Nav2 Autonomous Navigation
 - ✅ RViz Visualization
 
-### Optional: Arm + Detection
+### Arm + Detection
 ```bash
 # Terminal 2 - Object detection
 ros2 launch yolov8_obb yolov8_obb.launch.py
