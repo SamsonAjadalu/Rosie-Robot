@@ -4,12 +4,12 @@ Rosie is a home assistant robot designed for object detection, grasping, and nav
 **August 2024 - June 2025**
 
 <div align="center">
-  <a href="https://www.youtube.com/watch?v=qHLM9LW5f4Y">
+  <a href="https://samsonajadalu.com/projects/rosie-autonomous-home-assistance-robot/">
     <img src="demo.gif" alt="Demo" />
   </a>
   
   <br> <p>
-    <a href="https://www.youtube.com/watch?v=qHLM9LW5f4Y">
+    <a href="https://samsonajadalu.com/projects/rosie-autonomous-home-assistance-robot/">
       <b>🎥 Click here to watch the demo</b>
     </a>
   </p>
